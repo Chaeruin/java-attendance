@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 public class Attendance {
     private Map<LocalDateTime, Attend> attendanceBook;
@@ -29,14 +31,31 @@ public class Attendance {
         }
         long minutesBetween = ChronoUnit.MINUTES.between(inputTime, standardTime) % 60;
         Attend result = null;
-        if (minutesBetween < 5) {
+        if (minutesBetween < 5 && minutesBetween > -5) {
             result = Attend.출석;
-        } else if (minutesBetween >= 5 && minutesBetween <= 30) {
+        } else if ((minutesBetween >= 5 && minutesBetween <= 30) || (minutesBetween <= -5 && minutesBetween >= -30)) {
             result = Attend.지각;
-        } else {
+        }
+        if (inputTime.getHour() == 0 && inputTime.getMinute() == 0) {
             result = Attend.결석;
         }
         this.attendanceBook.put(localDateTime, result);
         return result;
+    }
+
+    public void deleteKeyByDate(int date) {
+        LocalDateTime key = null;
+        for (Entry<LocalDateTime, Attend> att : attendanceBook.entrySet()) {
+            if (att.getKey().getDayOfMonth() == date) {
+                key = att.getKey();
+            }
+        }
+        if (key != null) {
+            attendanceBook.remove(key);
+        }
+    }
+
+    public void sortAttend() {
+        this.attendanceBook = new TreeMap<>(this.attendanceBook);
     }
 }

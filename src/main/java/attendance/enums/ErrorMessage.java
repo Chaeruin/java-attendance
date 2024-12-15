@@ -1,7 +1,7 @@
 package attendance.enums;
 
 public enum ErrorMessage {
-    INVALID_INPUT("[[ERROR] 잘못된 형식을 입력하였습니다."),
+    INVALID_INPUT("[ERROR] 잘못된 형식을 입력하였습니다."),
     INVALID_NICKNAME("[ERROR] 등록되지 않은 닉네임입니다."),
     //    INVALID_DATE("[ERROR] 은 등교일이 아닙니다."),
     INVALID_FUTURE_DATE("[ERROR] 아직 수정할 수 없습니다."),

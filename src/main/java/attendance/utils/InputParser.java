@@ -2,18 +2,13 @@ package attendance.utils;
 
 import attendance.domain.Crew;
 import attendance.enums.ErrorMessage;
+import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class InputParser {
 
-    public static String parseMenu(String input) {
-        if (InputValidator.isMenuInput(input)) {
-            return input;
-        }
-        return null;
-    }
 
     public static Crew parseCrew(List<Crew> crews, String input) {
         if (Finder.findCrewByName(crews, input) != null) {
@@ -24,11 +19,18 @@ public class InputParser {
     }
 
     public static LocalDateTime parseDateTime(String input) {
-        if (InputValidator.isNowWeekEnd(input) && InputValidator.isOnCampusTime(input) && InputValidator.isValidHour(
-                input)) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            LocalDateTime inputTime = LocalDateTime.parse(input, formatter);
-            return inputTime;
+        try {
+            if (InputValidator.isNowWeekEnd() && InputValidator.isValidHour(input) && InputValidator.isOnCampusTime(
+                    input)) {
+                LocalDateTime now = DateTimes.now();
+                int day = now.getDayOfMonth();
+                int hour = Integer.parseInt(input.split(":")[0]);
+                int minute = Integer.parseInt(input.split(":")[1]);
+                LocalDateTime inputTime = LocalDateTime.of(2024, 12, day, hour, minute);
+                return inputTime;
+            }
+        } catch (DateTimeParseException | NumberFormatException e) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_INPUT.getErrorMessage());
         }
         return null;
     }

@@ -4,7 +4,6 @@ import attendance.enums.ErrorMessage;
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class InputValidator {
     // 메뉴 입력 문자가 아닌 경우
@@ -50,7 +49,7 @@ public class InputValidator {
         return true;
     }
 
-    public static boolean isNowWeekEnd(String input) {
+    public static boolean isNowWeekEnd() {
         LocalDateTime now = DateTimes.now();
         int month = now.getMonthValue();
         int day = now.getDayOfMonth();
@@ -81,10 +80,12 @@ public class InputValidator {
     }
 
     public static boolean isOnCampusTime(String input) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        LocalDateTime inputTime = LocalDateTime.parse(input, formatter);
-        LocalDateTime campusStartTime = LocalDateTime.parse("08:00", formatter);
-        LocalDateTime campusEndTime = LocalDateTime.parse("23:00", formatter);
+        LocalDateTime now = DateTimes.now();
+        int hour = Integer.parseInt(input.split(":")[0]);
+        int minute = Integer.parseInt(input.split(":")[1]);
+        LocalDateTime inputTime = LocalDateTime.of(2024, 12, now.getDayOfMonth(), hour, minute);
+        LocalDateTime campusStartTime = LocalDateTime.of(2024, 12, now.getDayOfMonth(), 8, 0);
+        LocalDateTime campusEndTime = LocalDateTime.of(2024, 12, now.getDayOfMonth(), 23, 0);
         // 확인 필요
         if ((inputTime.isEqual(campusStartTime) || inputTime.isAfter(campusStartTime)) && (inputTime.isEqual(
                 campusEndTime)) || inputTime.isBefore(campusEndTime)) {

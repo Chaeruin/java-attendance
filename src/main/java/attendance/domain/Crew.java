@@ -12,7 +12,7 @@ public class Crew {
     public Crew(String name) {
         this.name = name;
     }
-    
+
     public Crew(String name, Attendance attendance) {
         this.name = name;
         this.attendance = attendance;
@@ -37,4 +37,5 @@ public class Crew {
     public void setSubject(AttendanceSubject subject) {
         this.subject = subject;
     }
+
 }
