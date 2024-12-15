@@ -21,7 +21,14 @@ public class CrewService {
             Map<LocalDateTime, Attend> crewBook = new TreeMap<>(crew.getAttendance().getAttendanceBook());
             List<LocalDateTime> tmp = new ArrayList<>();
             for (Entry<LocalDateTime, Attend> crb : crewBook.entrySet()) {
+                if (day == 7 || day == 8 || day == 14 || day == 15) {
+                    day++;
+                }
                 while (day != crb.getKey().getDayOfMonth()) {
+                    if (day == 7 || day == 8 || day == 14 || day == 15) {
+                        day++;
+                        continue;
+                    }
                     LocalDateTime dateTime = LocalDateTime.of(2024, 12, day, 0, 0);
                     tmp.add(dateTime);
                     day++;
@@ -29,12 +36,20 @@ public class CrewService {
                 if (day == DateTimes.now().getDayOfMonth()) {
                     break;
                 }
+                if (day == crb.getKey().getDayOfMonth()) {
+                    day++;
+                }
             }
             for (LocalDateTime t : tmp) {
                 crew.getAttendance().addToAttendBook(t);
             }
             crew.getAttendance().sortAttend();
             day = 2;
+        }
+
+        for (Crew crew : crews) {
+            crew.setAttendCount();
+            crew.setAttendanceSubject();
         }
 
         return crews;

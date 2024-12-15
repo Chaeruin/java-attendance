@@ -1,12 +1,14 @@
 package attendance.controller;
 
 import attendance.domain.Crew;
+import attendance.enums.Attend;
 import attendance.service.AttendanceService;
 import attendance.service.CrewService;
 import attendance.utils.InputParser;
 import attendance.utils.InputValidator;
 import attendance.view.InputView;
 import attendance.view.OutputView;
+import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class AttendanceController {
             } else if (mainMenuInput.equals("3")) {
                 crewsAttendCheck();
             } else if (mainMenuInput.equals("4")) {
-
+                warningCrewCheck();
             }
 
             mainMenuInput = inputView.getMenu();
@@ -50,7 +52,7 @@ public class AttendanceController {
     public void checkAttendance() {
         InputValidator.isNowWeekEnd();
         Crew crew = InputParser.parseCrew(crews, inputView.getNickName());
-        LocalDateTime goTime = InputParser.parseDateTime(inputView.getTime());
+        LocalDateTime goTime = InputParser.parseDateTime(DateTimes.now(), inputView.getTime());
 
         LocalDateTime key = attendanceService.checkingAttend(crew, goTime);
         outputView.printCheckingAttend(goTime, crew, key);
@@ -59,10 +61,12 @@ public class AttendanceController {
     public void modifyAttendance() {
         Crew crew = InputParser.parseCrew(crews, inputView.getModifyNickName());
         int date = InputParser.parseDate(inputView.getModifyDate());
-        LocalDateTime whenTime = InputParser.parseDateTime(inputView.getModifyTime());
 
+        LocalDateTime beforeTime = crew.getAttendance().findByKeyByDate(date);
+        LocalDateTime whenTime = InputParser.parseDateTime(beforeTime, inputView.getModifyTime());
+        Attend beforeAttend = crew.getAttendance().getAttendanceBook().get(beforeTime);
         LocalDateTime key = attendanceService.modifyingAttend(crew, date, whenTime);
-        outputView.printCheckingAttend(whenTime, crew, key);
+        outputView.printModifyingAttend(whenTime, crew, key, beforeTime, beforeAttend);
     }
 
     public void crewsAttendCheck() {
@@ -71,6 +75,6 @@ public class AttendanceController {
     }
 
     public void warningCrewCheck() {
-
+        outputView.printCheckAll(crews);
     }
 }

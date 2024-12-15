@@ -36,7 +36,7 @@ public class Attendance {
         } else if ((minutesBetween >= 5 && minutesBetween <= 30) || (minutesBetween <= -5 && minutesBetween >= -30)) {
             result = Attend.지각;
         }
-        if (inputTime.getHour() == 0 && inputTime.getMinute() == 0) {
+        if (inputTime.getHour() == 0 && inputTime.getMinute() == 0 || minutesBetween > 30 || minutesBetween < -30) {
             result = Attend.결석;
         }
         this.attendanceBook.put(localDateTime, result);
@@ -55,7 +55,50 @@ public class Attendance {
         }
     }
 
+    public LocalDateTime findByKeyByDate(int date) {
+        for (Entry<LocalDateTime, Attend> ab : this.attendanceBook.entrySet()) {
+            if (ab.getKey().getDayOfMonth() == date) {
+                return ab.getKey();
+            }
+        }
+        return null;
+    }
+
+    public void setAttendByKeyDate(LocalDateTime date) {
+        this.attendanceBook.put(date, this.addToAttendBook(date));
+    }
+
     public void sortAttend() {
         this.attendanceBook = new TreeMap<>(this.attendanceBook);
+    }
+
+    public int attendCount() {
+        int attend = 0;
+        for (Entry<LocalDateTime, Attend> ab : this.attendanceBook.entrySet()) {
+            if (ab.getValue() == Attend.출석) {
+                attend++;
+            }
+        }
+        return attend;
+    }
+
+    public int absentCount() {
+        int absent = 0;
+        for (Entry<LocalDateTime, Attend> ab : this.attendanceBook.entrySet()) {
+            if (ab.getValue() == Attend.결석) {
+                absent++;
+            }
+        }
+        return absent;
+    }
+
+    public int lateCount() {
+        int late = 0;
+        for (Entry<LocalDateTime, Attend> ab : this.attendanceBook.entrySet()) {
+            if (ab.getValue() == Attend.지각) {
+                late++;
+            }
+        }
+        return late;
     }
 }

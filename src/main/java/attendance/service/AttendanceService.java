@@ -17,6 +17,9 @@ public class AttendanceService {
         LocalDateTime newAttend = LocalDateTime.of(2024, 12, date, inputTime.getHour(), inputTime.getMinute());
         crew.getAttendance().deleteKeyByDate(date);
         crew.getAttendance().addToAttendBook(newAttend);
+        crew.getAttendance().setAttendByKeyDate(newAttend);
+        crew.setAttendCount();
+        crew.setAttendanceSubject();
         return newAttend;
     }
 }

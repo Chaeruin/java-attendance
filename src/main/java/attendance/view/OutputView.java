@@ -6,6 +6,8 @@ import attendance.enums.DayOfWeek;
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map.Entry;
 
 public class OutputView {
@@ -20,14 +22,15 @@ public class OutputView {
     }
 
     // 이전 상태 불러오기 실패
-    public void printModifyingAttend(LocalDateTime modifyTime, Crew crew, LocalDateTime key) {
-        LocalDateTime now = modifyTime;
+    public void printModifyingAttend(LocalDateTime modifyTime, Crew crew, LocalDateTime key, LocalDateTime beforeTime,
+                                     Attend beforeAttend) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        System.out.println(now.getMonthValue() + "월 " + now.getDayOfMonth() + "일 " + DayOfWeek.getDayOfWeek(
-                now.getDayOfWeek().getValue()) + "요일 " + modifyTime.format(formatter) + " (" + crew.getAttendance()
-                .getAttendanceBook().get(key).name() + ") -> " + modifyTime.format(formatter) + " ("
-                + crew.getAttendance().getAttendanceBook().get(key).name() + ") 수정 완료!");
+        System.out.println(
+                modifyTime.getMonthValue() + "월 " + modifyTime.getDayOfMonth() + "일 " + DayOfWeek.getDayOfWeek(
+                        modifyTime.getDayOfWeek().getValue()) + "요일 " + beforeTime.format(formatter) + " ("
+                        + beforeAttend.name() + ") -> " + modifyTime.format(formatter) + " ("
+                        + crew.getAttendance().getAttendanceBook().get(key).name() + ") 수정 완료!");
     }
 
     public void printAttendCheck(Crew crew) {
@@ -42,7 +45,23 @@ public class OutputView {
             } else {
                 System.out.println(cb.getKey().format(formatter2) + " (" + cb.getValue() + ")");
             }
+        }
+        System.out.println();
+        System.out.println("출석: " + crew.getAttendCount().get(Attend.출석) + "회");
+        System.out.println("지각: " + crew.getAttendCount().get(Attend.지각) + "회");
+        System.out.println("결석: " + crew.getAttendCount().get(Attend.결석) + "회");
+        System.out.println();
+        System.out.println(crew.getSubject().name() + " 대상자입니다.");
+    }
 
+    public void printCheckAll(List<Crew> crews) {
+        System.out.println("제적 위험자 조회 결과");
+        Collections.sort(crews);
+        for (Crew crew : crews) {
+            System.out.println("- " + crew.getName()
+                    + ": 결석 " + crew.getAttendCount().get(Attend.결석) + "회, "
+                    + "지각 " + crew.getAttendCount().get(Attend.지각) + " 회 "
+                    + "(" + crew.getSubject().name() + ")");
         }
     }
 }
