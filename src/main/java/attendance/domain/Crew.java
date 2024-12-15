@@ -9,6 +9,10 @@ public class Crew {
 
     private Attendance attendance;
 
+    public Crew(String name) {
+        this.name = name;
+    }
+    
     public Crew(String name, Attendance attendance) {
         this.name = name;
         this.attendance = attendance;
