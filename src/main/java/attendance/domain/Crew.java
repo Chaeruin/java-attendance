@@ -25,4 +25,12 @@ public class Crew {
     public Attendance getAttendance() {
         return this.attendance;
     }
+
+    public AttendanceSubject getSubject() {
+        return this.subject;
+    }
+
+    public void setSubject(AttendanceSubject subject) {
+        this.subject = subject;
+    }
 }
