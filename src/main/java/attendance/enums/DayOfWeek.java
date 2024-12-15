@@ -31,5 +31,6 @@ public enum DayOfWeek {
         } else if (dayOfWeek == 7) {
             return DayOfWeek.일;
         }
+        return null;
     }
 }
