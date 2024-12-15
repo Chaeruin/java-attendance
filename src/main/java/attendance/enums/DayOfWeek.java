@@ -15,6 +15,10 @@ public enum DayOfWeek {
         this.dayOfWeek = dayOfWeek;
     }
 
+    public int getDayOfWeek() {
+        return dayOfWeek;
+    }
+
     public static DayOfWeek getDayOfWeek(int dayOfWeek) {
         if (dayOfWeek == 1) {
             return DayOfWeek.월;

@@ -9,8 +9,9 @@ public class Crew {
 
     private Attendance attendance;
 
-    public Crew(String name) {
+    public Crew(String name, Attendance attendance) {
         this.name = name;
+        this.attendance = attendance;
     }
 
     public String getName() {
@@ -19,5 +20,9 @@ public class Crew {
 
     public void setAttendance(Attendance attendance) {
         this.attendance = attendance;
+    }
+
+    public Attendance getAttendance() {
+        return this.attendance;
     }
 }
